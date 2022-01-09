@@ -22,6 +22,17 @@ app.get('/restaurants/:id', (req, res) => {
   res.render('show', { restaurants: restaurant })
 })
 
+app.get('/search', (req, res) => {
+  const restaurant = restaurants.results.filter(item => {
+    return item.name.toLowerCase().includes(req.query.keyword.trim().toLowerCase()) || item.category.trim().toLowerCase().includes(req.query.keyword.trim().toLowerCase())
+  })
+
+  if (restaurant.length === 0) {
+    res.render('error', { restaurants: restaurant, keyword: req.query.keyword })
+  }
+  res.render('index', { restaurants: restaurant, keyword: req.query.keyword.trim() })
+})
+
 app.listen(port, () => {
   console.log('Server is started...')
 })
